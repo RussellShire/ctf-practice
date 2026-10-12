@@ -1,11 +1,15 @@
 import subprocess
 import sys
 
-passwords=['one', 'two']
+with open('dictionary.txt', 'r') as file:
+    passwords = file.read().splitlines()
+
 attempts=0
-correctPassword=''
+flag=''
 
 for password in passwords:
+    print(attempts)
+
     process = subprocess.Popen(
         [sys.executable, 'level5.py'],
         stdin=subprocess.PIPE,
@@ -19,6 +23,8 @@ for password in passwords:
     if "That password is incorrect" not in stdout:
         print(f"Trying: {password}")
         print("Output:", stdout)
+        flag = stdout
+        break
 
     if stderr:
         print("Error:", stderr)
@@ -26,3 +32,4 @@ for password in passwords:
     attempts += 1
 
 print("Process completed, passwords attempted: ", attempts)
+print("flag: ", flag)
